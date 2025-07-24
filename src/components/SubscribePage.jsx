@@ -117,6 +117,11 @@ export default function SubscribePage() {
             <p className="text-xs text-gray-400">
               We respect your privacy. Unsubscribe at any time.
             </p>
+            <img
+              src="https://www.svgviewer.dev/static-svgs/416289/sparkles.svg"
+              alt="Sparkles"  
+              className="w-8 h-8 mx-auto mt-4"
+            />
           </div>
         </div>
 

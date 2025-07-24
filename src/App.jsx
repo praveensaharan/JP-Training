@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { Mail, Calendar, Sparkles } from "lucide-react"
 import SubscribePage from "./components/SubscribePage"
 import BookPage from "./components/BookPage"
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import UnsubscribePage from "./components/UnSubscribe"
 const NAV = [
   { label: "Subscribe", value: "subscribe", icon: Mail, description: "Get notified for slots" },
   { label: "Book", value: "book", icon: Calendar, description: "Reserve your class" },
@@ -12,6 +13,11 @@ export default function App() {
   const [page, setPage] = useState("subscribe")
 
   return (
+    <Router>
+      <Routes>
+        {/* New route for unsubscribe */}
+        <Route path="/unsubscribe" element={<UnsubscribePage />} />
+         <Route path="/" element={
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -94,6 +100,9 @@ export default function App() {
           </div>
         </div>
       </div>
-    </div>
+    </div> }
+        />
+      </Routes>
+    </Router>
   )
 }
