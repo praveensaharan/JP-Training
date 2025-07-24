@@ -1,33 +1,33 @@
-import React from "react"
-
-import { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react";
 import { CheckCircle, XCircle, Loader2, Sparkles, Mail } from "lucide-react"
 
 export default function UnsubscribePage() {
-  const [status, setStatus] = useState("loading") // 'loading', 'success', 'error'
+  const [status, setStatus] = useState("loading");
+  const effectRan = useRef(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const email = params.get("email")
+    if (effectRan.current) return; // prevent second call in Strict Mode
+
+    effectRan.current = true;
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
 
     if (!email) {
-      setStatus("error")
-      return
+      setStatus("error");
+      return;
     }
 
     fetch("http://localhost:8000/unsubscribe", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     })
       .then((res) => {
-        if (res.ok) setStatus("success")
-        else throw new Error()
+        if (res.ok) setStatus("success");
+        else throw new Error();
       })
-      .catch(() => setStatus("error"))
-  }, [])
+      .catch(() => setStatus("error"));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 relative overflow-hidden">
