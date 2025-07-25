@@ -32,7 +32,7 @@ export default function BookPage() {
     setIsLoading(true)
 
     try {
-      const r = await fetch("http://127.0.0.1:8000/book", {
+      const r = await fetch("https://jp-training-backend.onrender.com/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

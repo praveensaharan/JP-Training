@@ -14,7 +14,7 @@ export default function SubscribePage() {
     setIsLoading(true)
 
     try {
-      const r = await fetch("http://localhost:8000/subscribe", {
+      const r = await fetch("https://jp-training-backend.onrender.com/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -117,11 +117,6 @@ export default function SubscribePage() {
             <p className="text-xs text-gray-400">
               We respect your privacy. Unsubscribe at any time.
             </p>
-            <img
-              src="https://www.svgviewer.dev/static-svgs/416289/sparkles.svg"
-              alt="Sparkles"  
-              className="w-8 h-8 mx-auto mt-4"
-            />
           </div>
         </div>
 

@@ -17,7 +17,7 @@ export default function UnsubscribePage() {
       return;
     }
 
-    fetch("http://localhost:8000/unsubscribe", {
+    fetch("https://jp-training-backend.onrender.com/unsubscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

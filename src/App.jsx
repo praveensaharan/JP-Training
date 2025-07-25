@@ -78,13 +78,13 @@ export default function App() {
         {/* Page Content */}
         <div className="w-full max-w-lg transition-all duration-500 ease-in-out">
           <div className={`transform transition-all duration-500 ${
-            page === "subscribe" ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 absolute"
+            page === "subscribe" ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 absolute"
           }`}>
             {page === "subscribe" && <SubscribePage />}
           </div>
 
           <div className={`transform transition-all duration-500 ${
-            page === "book" ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 absolute"
+            page === "book" ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 absolute"
           }`}>
             {page === "book" && <BookPage />}
           </div>
