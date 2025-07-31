@@ -35,53 +35,78 @@ export default function BookPage() {
     setSelectedSlot(slot);
   }
 
+
   async function handleSubmit(e) {
-    e.preventDefault();
-    if (!selectedSlot) {
-      setResult("Please select a class slot.");
-      setSuccess(false);
-      return;
-    }
+  e.preventDefault();
 
+  // Validate all required fields
+  if (!form.login_id || !form.login_pw || !form.month || !form.day) {
+    setResult("Please fill in all login and date fields.");
     setSuccess(false);
-    setResult("");
-    setIsLoading(true);
-   
-    try {
-      const r = await fetch("https://jp-training-backend.onrender.com/book", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          login_id: form.login_id,
-          login_pw: form.login_pw,
-          month: Number(form.month),
-          day: Number(form.day),
-          slot_id: selectedSlot.id,
-          start_time: selectedSlot.start_time,
-          end_time: selectedSlot.end_time,
-          room: selectedSlot.room,
-        }),
-      });
-      
-      const res = await r.json();
-
-      if (r.ok) {
-        setResult(res.result || "Booking request sent successfully!");
-        setSuccess(true);
-        setForm({ login_id: "", login_pw: "", month: "", day: "" });
-        setSelectedDate(null);
-        setSelectedSlot(null);
-      } else {
-        setResult(res.detail || "Failed to book slot.");
-        setSuccess(false);
-      }
-    } catch {
-      setResult("Network error, please try later.");
-      setSuccess(false);
-    } finally {
-      setIsLoading(false);
-    }
+    return;
   }
+
+  if (!selectedSlot) {
+    setResult("Please select a class slot.");
+    setSuccess(false);
+    return;
+  }
+
+  setSuccess(false);
+  setResult("");
+  setIsLoading(true);
+
+  try {
+   
+    const payload = {
+      login_id: form.login_id,
+      login_pw: form.login_pw,
+      month: Number(form.month),
+      day: Number(form.day),
+      start_time: selectedSlot.start_time,
+      end_time: selectedSlot.end_time,
+      room: selectedSlot.room,
+      id: selectedSlot.id,               
+      day_of_week: selectedSlot.day_of_week 
+    };
+
+
+    console.log("Submitting payload:", payload); // For debugging
+
+    const r = await fetch("https://jp-training-backend.onrender.com/book", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const res = await r.json();
+
+    if (r.ok) {
+      setResult(res.result || "Booking request sent successfully!");
+      setSuccess(true);
+      setForm({ login_id: "", login_pw: "", month: "", day: "" });
+      setSelectedDate(null);
+      setSelectedSlot(null);
+    } else {
+      if (typeof res.detail === "string") {
+        setResult(res.detail);
+      } else if (Array.isArray(res.detail)) {
+        const messages = res.detail.map((d) => d.msg).join(" ");
+        setResult(messages || "Failed to book slot.");
+      } else {
+        setResult("Failed to book slot.");
+      }
+      setSuccess(false);
+    }
+  } catch (err) {
+    console.error("Booking error:", err);
+    setResult("Network error, please try again later.");
+    setSuccess(false);
+  } finally {
+    setIsLoading(false);
+  }
+}
+
 
   return (
     <div className="flex items-center justify-center p-4 relative rounded-lg">
