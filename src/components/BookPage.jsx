@@ -70,9 +70,6 @@ export default function BookPage() {
       day_of_week: selectedSlot.day_of_week 
     };
 
-
-    console.log("Submitting payload:", payload); // For debugging
-
     const r = await fetch("https://jp-training-backend.onrender.com/book", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -161,6 +158,19 @@ export default function BookPage() {
               selectedSlotId={selectedSlot ? selectedSlot.id : ""}
               onSlotChange={handleSlotChange}
             />
+            <div className="text-center">
+              <p className="text-xs text-gray-400">
+                Please proceed at your own risk. You can also review our code if you have any doubts:{" "}
+                <a 
+                  href="https://github.com/praveensaharan/JP-Training-Backend" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-purple-400 hover:text-purple-600 underline transition-colors duration-300"
+                >
+                  Link
+                </a>
+              </p>
+            </div>
 
             {/* Login Fields */}
             <div className="space-y-4">
