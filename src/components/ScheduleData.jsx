@@ -31,6 +31,12 @@ export default function ScheduleSelector({
     return []
   }, [month, day])
 
+  // Helper to safely pad month and day as 2-digit strings
+  const pad2 = (str) => {
+    const s = String(str)
+    return s.length === 1 ? "0" + s : s
+  }
+
   if (!month || !day) {
     return (
       <p className="text-center text-sm font-medium text-gray-400 mb-6 backdrop-blur-sm bg-white/5 border border-white/10 px-4 py-3 rounded-2xl">
@@ -52,18 +58,18 @@ export default function ScheduleSelector({
       <h3 className="text-white text-center tracking-wide mb-2">
         General Slots on{" "}
         <span className="text-cyan-300">
-          2025-{month.padStart(2, "0")}-{day.padStart(2, "0")}
+          2025-{pad2(month)}-{pad2(day)}
         </span>{" "}
         ({availableSlots[0].day_of_week})
       </h3>
 
       <div className="relative">
         <select
-          value={selectedSlotId}
+          value={selectedSlotId || ""}
           onChange={(e) => {
-                const selected = availableSlots.find(s => s.id === Number(e.target.value));
-                onSlotChange(selected);  // send whole slot object
-            }}
+            const selected = availableSlots.find((s) => s.id === Number(e.target.value))
+            onSlotChange(selected) // send whole slot object up
+          }}
           required
           aria-label="Select a time slot"
           className="w-full appearance-none rounded-2xl bg-white/10 border border-white/20 px-5 py-3 pr-12 text-white shadow-inner backdrop-blur-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:bg-white/20"
@@ -72,11 +78,7 @@ export default function ScheduleSelector({
             Select a slot
           </option>
           {availableSlots.map((slot) => (
-            <option
-              key={slot.id}
-              value={slot.id}
-              className="text-black"
-            >
+            <option key={slot.id} value={slot.id} className="text-black">
               {slot.start_time} - {slot.end_time} | {slot.room}
             </option>
           ))}

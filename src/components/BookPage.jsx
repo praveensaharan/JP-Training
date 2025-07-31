@@ -11,9 +11,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import ScheduleSelector from "./ScheduleData";
-
-
+import ScheduleSelector from "./ScheduleData"; // ensure path and filename are correct
 
 export default function BookPage() {
   const [form, setForm] = useState({
@@ -24,7 +22,6 @@ export default function BookPage() {
   });
 
   const [selectedSlot, setSelectedSlot] = useState(null);
-
   const [selectedDate, setSelectedDate] = useState(null);
   const [result, setResult] = useState("");
   const [success, setSuccess] = useState(false);
@@ -38,7 +35,6 @@ export default function BookPage() {
     setSelectedSlot(slot);
   }
 
-
   async function handleSubmit(e) {
     e.preventDefault();
     if (!selectedSlot) {
@@ -50,24 +46,23 @@ export default function BookPage() {
     setSuccess(false);
     setResult("");
     setIsLoading(true);
-
+   
     try {
       const r = await fetch("https://jp-training-backend.onrender.com/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-        login_id: form.login_id,
-        login_pw: form.login_pw,
-        month: Number(form.month),
-        day: Number(form.day),
-        slot_id: selectedSlot.id,
-        start_time: selectedSlot.start_time,
-        end_time: selectedSlot.end_time,
-        room: selectedSlot.room,
-      }),
+          login_id: form.login_id,
+          login_pw: form.login_pw,
+          month: Number(form.month),
+          day: Number(form.day),
+          slot_id: selectedSlot.id,
+          start_time: selectedSlot.start_time,
+          end_time: selectedSlot.end_time,
+          room: selectedSlot.room,
+        }),
       });
       
-
       const res = await r.json();
 
       if (r.ok) {
@@ -89,7 +84,7 @@ export default function BookPage() {
   }
 
   return (
-        <div className="flex items-center justify-center p-4 relative rounded-lg">
+    <div className="flex items-center justify-center p-4 relative rounded-lg">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 rounded-4xl">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -108,8 +103,6 @@ export default function BookPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} autoComplete="off" className="space-y-6">
-
-
             {/* Date Picker */}
             <div className="flex flex-col items-center space-y-2">
               <label className="flex items-center space-x-2 text-gray-300 text-sm font-medium mb-1">
@@ -121,11 +114,12 @@ export default function BookPage() {
                 onChange={(date) => {
                   setSelectedDate(date);
                   if (date) {
-                    setForm((prev) => ({
+                    setForm(prev => ({
                       ...prev,
                       month: String(date.getMonth() + 1),
                       day: String(date.getDate()),
                     }));
+                    setSelectedSlot(null); // reset slot when date changes
                   }
                 }}
                 placeholderText="Select a date (2+ days ahead)"
@@ -133,28 +127,17 @@ export default function BookPage() {
                 dateFormat="MMMM d, yyyy"
                 className="w-full md:w-72 px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm text-center hover:bg-white/20 focus:bg-white/20"
               />
-            </div>            
+            </div>
+
+            {/* Schedule Selector */}
             <ScheduleSelector
               month={form.month}
               day={form.day}
-              selectedSlot={selectedSlot ? selectedSlot.id : ""}
+              selectedSlotId={selectedSlot ? selectedSlot.id : ""}
               onSlotChange={handleSlotChange}
             />
-            <div className="text-center">
-              <p className="text-xs text-gray-400">
-                Please proceed at your own risk. You can also review our code if you have any doubts:{" "}
-                <a 
-                  href="https://github.com/praveensaharan/JP-Training-Backend" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-purple-400 hover:text-purple-600 underline transition-colors duration-300"
-                >
-                  Link
-                </a>
-              </p>
-            </div>
 
-
+            {/* Login Fields */}
             <div className="space-y-4">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -188,6 +171,7 @@ export default function BookPage() {
                 />
               </div>
             </div>
+
             <button
               type="submit"
               disabled={isLoading}
@@ -238,7 +222,7 @@ export default function BookPage() {
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-xs text-gray-400">
-                We will book the class on your behalf.
+              We will book the class on your behalf.
             </p>
           </div>
         </div>
